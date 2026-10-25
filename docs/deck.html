@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Perpetua — Mezo Buildathon</title>
+<style>
+/*
+ * Self-contained 16:9 deck. Open in a browser and print to PDF:
+ *   Ctrl/Cmd-P -> Destination "Save as PDF" -> Layout Landscape
+ *   -> Margins None -> Background graphics ON
+ * Each .slide is exactly one page.
+ *
+ * Palette matches the app: validated dark surfaces (#1a1a19) with BTC on
+ * categorical slot 2 (orange) and MUSD on slot 3 (aqua).
+ */
+:root {
+  --surface-0:#121211; --surface-1:#1a1a19; --surface-2:#232321; --border:#333330;
+  --ink:#f0efec; --ink-2:#c3c2b7; --ink-3:#8a897f;
+  --btc:#d95926; --musd:#199e70; --good:#0ca30c; --warn:#fab219;
+  --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--surface-0);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+.slide{
+  width:1280px;height:720px;margin:0 auto 20px;padding:56px 64px;
+  background:var(--surface-0);display:flex;flex-direction:column;position:relative;
+  border:1px solid var(--border);overflow:hidden;
+}
+.num{position:absolute;right:64px;bottom:40px;font-size:12px;color:var(--ink-3)}
+.kicker{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:14px}
+h1{font-size:68px;line-height:1.02;letter-spacing:-.02em;font-weight:650}
+h2{font-size:40px;line-height:1.1;letter-spacing:-.015em;font-weight:620;margin-bottom:26px}
+.lede{font-size:26px;line-height:1.38;color:var(--ink-2);font-weight:400}
+p{font-size:19px;line-height:1.5;color:var(--ink-2)}
+strong{color:var(--ink);font-weight:620}
+.btc{color:var(--btc)} .musd{color:var(--musd)} .good{color:var(--good)}
+.grow{flex:1}
+.center{justify-content:center}
+
+table{width:100%;border-collapse:collapse;font-size:18px}
+th{text-align:left;font-size:13px;letter-spacing:.04em;text-transform:uppercase;
+   color:var(--ink-3);font-weight:600;padding:0 14px 10px 0;border-bottom:1px solid var(--border)}
+td{padding:11px 14px 11px 0;border-bottom:1px solid #26262400;color:var(--ink-2);vertical-align:top}
+tr+tr td{border-top:1px solid #2a2a28}
+td strong{color:var(--ink)}
+
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:20px}
+.card h3{font-size:17px;font-weight:620;margin-bottom:8px;color:var(--ink)}
+.card p{font-size:15.5px;line-height:1.45}
+
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:8px}
+.tile{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px}
+.tile .l{font-size:12.5px;color:var(--ink-2)}
+.tile .v{font-size:30px;font-weight:650;line-height:1.05;margin-top:6px}
+.tile .s{font-size:12px;color:var(--ink-3);margin-top:5px}
+
+pre{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;
+    padding:22px;font-family:var(--mono);font-size:15px;line-height:1.65;color:var(--ink-2);
+    white-space:pre;overflow:hidden}
+pre b{color:var(--btc);font-weight:600}
+pre i{color:var(--musd);font-style:normal;font-weight:600}
+
+ul{list-style:none}
+li{font-size:19.5px;line-height:1.5;color:var(--ink-2);padding-left:26px;position:relative;margin-bottom:13px}
+li::before{content:"";position:absolute;left:4px;top:11px;width:7px;height:7px;border-radius:50%;background:var(--btc)}
+li.m::before{background:var(--musd)}
+ul.tight li{font-size:17.5px;margin-bottom:9px}
+
+.badge{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);
+       border-radius:999px;padding:5px 13px;font-size:13.5px;color:var(--ink-2)}
+.badge.g{border-color:#0ca30c66;color:var(--good)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+.logo{width:30px;height:30px;border-radius:8px;background:var(--btc)}
+.foot{font-size:14px;color:var(--ink-3);font-family:var(--mono)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.hr{height:1px;background:var(--border);margin:22px 0}
+
+@page{size:1280px 720px;margin:0}
+@media print{
+  body{background:#fff}
+  .slide{margin:0;border:none;page-break-after:always;break-after:page}
+  .slide:last-child{page-break-after:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- 1 ------------------------------------------------------------------ -->
+<section class="slide center">
+  <div class="row" style="margin-bottom:30px">
+    <span class="logo"></span>
+    <span style="font-size:22px;font-weight:620">Perpetua</span>
+  </div>
+  <h1>Liquid veBTC with<br>a <span class="musd">MUSD</span> coupon</h1>
+  <p class="lede" style="margin-top:28px;max-width:860px">
+    Deposit <span class="btc">BTC</span> once. Get a token that never decays
+    and pays you in <span class="musd">MUSD</span>.
+  </p>
+  <div class="grow"></div>
+  <div class="row">
+    <span class="badge">Mezo Buildathon · Wave 1</span>
+    <span class="badge">Track 1 + Track 2</span>
+    <span class="badge g"><span class="dot"></span>Live on Mezo testnet</span>
+  </div>
+  <div class="num">1</div>
+</section>
+
+<!-- 2 ------------------------------------------------------------------ -->
+<section class="slide">
+  <div class="kicker">The problem</div>
+  <h2>veBTC is a wasting asset</h2>
+  <table>
+    <thead><tr><th style="width:38%">Friction</th><th>Consequence</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Max lock is 28 days</strong></td><td>Re-lock every month or the position dies</td></tr>
+      <tr><td><strong>Weight decays to zero</strong></td><td>Voting power bleeds away continuously</td></tr>
+      <tr><td><strong>Boost must be poked</strong></td><td>Forget, and your multiplier silently lags</td></tr>
+      <tr><td><strong>Fees claimed per epoch</strong></td><td>Unclaimed rewards are forfeited outright</td></tr>
+      <tr><td><strong>5x boost needs veMEZO</strong></td><td>Small holders can never reach it</td></tr>
+      <tr><td><strong>A lock is an NFT</strong></td><td>Illiquid; unusable as collateral anywhere</td></tr>
+    </tbody>
+  </table>
+  <div class="grow"></div>
+  <p style="font-size:21px"><strong>veBTC rewards large, active, sophisticated holders — and quietly
+  penalises everyone else.</strong> Capital that should be securing MUSD liquidity sits idle instead.</p>
+  <div class="num">2</div>
+</section>
+
+<!-- 3 ------------------------------------------------------------------ -->
+<section class="slide">
+  <div class="kicker">The solution</div>
+  <h2>One deposit, and the upkeep disappears</h2>
+<pre>  you ──<b>BTC</b>──▶   <b>PerpetuaLocker</b>  ───────────▶  one veBTC NFT, locked <b>permanently</b>
+  you ◀─<b>lveBTC</b>─   votes the bloc, harvests              │
+                                                        ▼
+                      <i>MUSDRewardStreamer</i>  ◀────  fees + incentives + chain fees
+  you ─<b>lveBTC</b>─▶   swaps to <i>MUSD</i>, streams 7 days
+  you ◀──<i>MUSD</i>──</pre>
+  <div class="cards" style="margin-top:28px">
+    <div class="card"><h3>No decay</h3><p>The position is permanent, so weight never bleeds away.</p></div>
+    <div class="card"><h3>No upkeep</h3><p>No re-locking, no poking, no weekly claim ritual.</p></div>
+    <div class="card"><h3>Liquid &amp; composable</h3><p>lveBTC is a plain ERC-20 — usable as collateral elsewhere.</p></div>
+  </div>
+  <div class="num">3</div>
+</section>
+
+<!-- 4 ------------------------------------------------------------------ -->
+<section class="slide">
+  <div class="kicker">Mezo integration</div>
+  <h2>Three layers, not a token logo</h2>
+  <ul>
+    <li class="m"><strong>Yield is denominated in MUSD.</strong> Every harvest is converted on-chain
+      through Mezo's Router and streamed to stakers. lveBTC is a Bitcoin position paying a dollar coupon.</li>
+    <li class="m"><strong>The fees captured <em>are</em> MUSD fees.</strong> 3 of the 4 live gauges on
+      Mezo testnet are MUSD pairs — MUSD/BTC, MUSD/mUSDC, MUSD/mT. Voting fee revenue <em>is</em>
+      MUSD trading revenue.</li>
+    <li class="m"><strong>It directs MEZO emissions.</strong> <code style="font-family:var(--mono);font-size:17px">VeBTCVoter.vote</code>
+      steers weekly MEZO emissions; Perpetua aims a growing bloc of that power at MUSD liquidity.</li>
+  </ul>
+  <div class="hr"></div>
+  <p>Layer 2 is not a claim in a deck — it is asserted by a test that reads Mezo's live Voter and
+  <strong>fails if it ever stops being true</strong>.</p>
+  <div class="grow"></div>
+  <p style="font-size:21px"><strong>Every new deposit deepens MUSD liquidity</strong>, because the
+  bloc's votes point there.</p>
+  <div class="num">4</div>
+</section>
+
+<!-- 5 ------------------------------------------------------------------ -->
+<section class="slide">
+  <div class="kicker">Evidence</div>
+  <h2>It works, against the real contracts</h2>
+  <p style="margin-bottom:22px">Tests run on a <strong>fork of live Mezo testnet</strong> — real
+  <code style="font-family:var(--mono)">VeBTC</code>, real
+  <code style="font-family:var(--mono)">VeBTCVoter</code>, real Router, real gauges. Not mocks.</p>
+  <table>
+    <thead><tr><th style="width:42%">Claim</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td><strong>lockPermanent works on Mezo</strong></td><td>veNFT minted; escrow reports <span class="good">isPermanent = true</span></td></tr>
+      <tr><td><strong>No decay</strong></td><td>Voting power <span class="good">identical after 4 weeks</span> — past the 28-day MAXTIME where an ordinary lock is worthless</td></tr>
+      <tr><td><strong>Votes land correctly</strong></td><td>70/30 split reads back as 1.4 / 0.6 via <code style="font-family:var(--mono)">VeBTCVoter.votes</code></td></tr>
+      <tr><td><strong>One aggregated position</strong></td><td>Later deposits call <code style="font-family:var(--mono)">increaseAmount</code>, never a second NFT</td></tr>
+      <tr><td><strong>Solvency enforced</strong></td><td>Streamer refuses to promise MUSD it does not hold</td></tr>
+    </tbody>
+  </table>
+  <div class="grow"></div>
+  <div class="row"><span class="badge g"><span class="dot"></span>15 tests passing</span>
+  <span class="badge">8 against live Mezo state</span></div>
+  <div class="num">5</div>
+</section>
+
+<!-- 6 ------------------------------------------------------------------ -->
+<section class="slide">
+  <div class="kicker">The product</div>
+  <h2>Live on Mezo testnet</h2>
+  <div class="tiles">
+    <div class="tile"><div class="l">Total BTC locked forever</div><div class="v btc">—</div><div class="s">Hero figure</div></div>
+    <div class="tile"><div class="l">Bloc voting power</div><div class="v">—</div><div class="s">Does not decay</div></div>
+    <div class="tile"><div class="l">lveBTC in circulation</div><div class="v">—</div><div class="s">1 lveBTC = 1 BTC</div></div>
+    <div class="tile"><div class="l">Yield rate</div><div class="v musd">—</div><div class="s">MUSD / lveBTC / yr</div></div>
+  </div>
+  <ul class="tight" style="margin-top:30px">
+    <li>One screen: deposit → stake → claim. No backend, no indexer — all state via one viem multicall.</li>
+    <li>Live gauge table read straight from Mezo's <code style="font-family:var(--mono);font-size:16px">VeBTCVoter</code>.</li>
+    <li>One-click <strong>add Mezo testnet</strong> for a wallet that has never seen it.</li>
+    <li>Yield shown as <strong>MUSD per lveBTC per year</strong>, not a fake APR — collapsing a MUSD
+      numerator and a BTC denominator into one percentage would imply a price we don't fetch.</li>
+  </ul>
+  <div class="grow"></div>
+  <p class="foot">&lt;screenshot + contract addresses go here&gt;</p>
+  <div class="num">6</div>
+</section>
+
+<!-- 7 ------------------------------------------------------------------ -->
+<section class="slide">
+  <div class="kicker">Honesty &amp; roadmap</div>
+  <h2>Deliberate limits, and what's next</h2>
+  <div class="two">
+    <div>
+      <h3 style="font-size:17px;color:var(--warn);margin-bottom:14px">Stated plainly</h3>
+      <ul class="tight">
+        <li><strong>Deposits are irreversible.</strong> Permanent lock, so no redemption. Exit by selling, like cvxCRV.</li>
+        <li><strong>Operator-gated</strong> voting and harvesting in Wave 1. It cannot withdraw the position or mint lveBTC.</li>
+        <li><strong>Unaudited, on testnet by choice.</strong> Permanently locking real BTC behind unaudited code would be irresponsible.</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-size:17px;color:var(--musd);margin-bottom:14px">Wave 2</h3>
+      <ul class="tight">
+        <li class="m"><strong>MUSDVoteMarket</strong> — anyone pays MUSD to bid for the bloc's votes, cleared per epoch. <strong>Makes MUSD the price of a Mezo gauge vote.</strong></li>
+        <li class="m">Replace the operator with an on-chain <strong>MUSD-per-vote optimiser</strong>.</li>
+        <li class="m"><strong>veMEZO boost</strong> toward the 5x multiplier.</li>
+        <li class="m"><strong>A real exit</strong> — seed an lveBTC/BTC pool, gauge it permissionlessly.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="num">7</div>
+</section>
+
+<!-- 8 ------------------------------------------------------------------ -->
+<section class="slide">
+  <div class="kicker">Why this, why now</div>
+  <h2>A missing primitive, not another app</h2>
+  <ul>
+    <li><strong>Nobody else is building it.</strong> Zero of the 48 Wave 1 submissions is a liquid
+      locker or staking derivative — while "staking derivatives for MUSD/MEZO" is an explicit Mezo ask.</li>
+    <li><strong>It is what the rubric rewards.</strong> Judging favours projects that plug into
+      "lending markets, DEXs, <em>vote-escrow systems</em>" over isolated consumer apps. This is
+      vote-escrow infrastructure.</li>
+    <li class="m"><strong>Every deposit deepens MUSD liquidity</strong>, because the bloc votes there.</li>
+    <li><strong>It is a lego.</strong> lveBTC is a composable primitive other Mezo protocols can
+      build on from day one, without our cooperation.</li>
+  </ul>
+  <div class="grow"></div>
+  <div class="hr"></div>
+  <p class="foot">github.com/&lt;user&gt;/perpetua · &lt;vercel-url&gt; · MIT</p>
+  <div class="num">8</div>
+</section>
+
+</body>
+</html>
