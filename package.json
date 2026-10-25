@@ -14,6 +14,7 @@
     "abi": "cd contracts && node scripts/export-abi.mjs",
     "dev": "npm --prefix web run dev",
     "typecheck": "npm --prefix contracts run typecheck && npm --prefix web run typecheck",
-    "seed:testnet": "npm --prefix contracts exec -- hardhat run scripts/seed.ts --network mezoTestnet"
+    "seed:testnet": "npm --prefix contracts exec -- hardhat run scripts/seed.ts --network mezoTestnet",
+    "check:reads": "npm --prefix web run check:reads"
   }
 }

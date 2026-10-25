@@ -1,8 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { createWalletClient, createPublicClient, custom, http, type Address, type WalletClient } from "viem";
-import { mezoTestnet, mezoTestnetParams } from "./chain";
+import { createWalletClient, custom, type Address, type WalletClient } from "viem";
+import { mezoTestnet, mezoTestnetParams, publicClient } from "./chain";
+
+// Re-exported for callers that import it alongside the wallet hook.
+export { publicClient };
 
 /** EIP-1193 surface we rely on. */
 type Eip1193 = {
@@ -16,12 +19,6 @@ declare global {
     ethereum?: Eip1193;
   }
 }
-
-/** Read-only client. Always available, so the dashboard renders before connecting. */
-export const publicClient = createPublicClient({
-  chain: mezoTestnet,
-  transport: http(),
-});
 
 export type WalletState = {
   address: Address | null;
