@@ -7,7 +7,9 @@
   "scripts": {
     "build": "hardhat compile",
     "test": "hardhat test",
-    "deploy:testnet": "hardhat run scripts/deploy.ts --network mezoTestnet"
+    "deploy:testnet": "hardhat run scripts/deploy.ts --network mezoTestnet",
+    "typecheck": "tsc --noEmit",
+    "seed:testnet": "hardhat run scripts/seed.ts --network mezoTestnet"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox-viem": "^5.0.7",

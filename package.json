@@ -12,6 +12,8 @@
     "test:fork": "npm --prefix contracts exec -- hardhat test test/locker.ts test/mezo-integration.ts --network mezoFork",
     "deploy:testnet": "npm --prefix contracts exec -- hardhat run scripts/deploy.ts --network mezoTestnet",
     "abi": "cd contracts && node scripts/export-abi.mjs",
-    "dev": "npm --prefix web run dev"
+    "dev": "npm --prefix web run dev",
+    "typecheck": "npm --prefix contracts run typecheck && npm --prefix web run typecheck",
+    "seed:testnet": "npm --prefix contracts exec -- hardhat run scripts/seed.ts --network mezoTestnet"
   }
 }
