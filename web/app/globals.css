@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+/*
+ * Tokens are referenced by role, so values swap in one place.
+ * Surfaces and ink come from the validated dark palette:
+ *   surface #1a1a19, text-primary #f0efec, text-secondary #c3c2b7.
+ * BTC wears categorical slot 2 (orange, dark step), MUSD slot 3 (aqua, dark step).
+ * `good` is the reserved status green and always ships with a text label,
+ * never as colour alone.
+ */
+@theme {
+  --color-surface-0: #121211;
+  --color-surface-1: #1a1a19;
+  --color-surface-2: #232321;
+  --color-border: #333330;
+
+  --color-ink: #f0efec;
+  --color-ink-secondary: #c3c2b7;
+  --color-ink-muted: #8a897f;
+
+  --color-btc: #d95926;
+  --color-musd: #199e70;
+  --color-good: #0ca30c;
+  --color-warning: #fab219;
+  --color-critical: #d03b3b;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-surface-0);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Columns of numbers that must align vertically. Never on hero/stat values -
+   tabular figures make large numbers look loose. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spin {
+  animation: spin 0.8s linear infinite;
+}

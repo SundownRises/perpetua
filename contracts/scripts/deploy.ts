@@ -1,0 +1,114 @@
+/**
+ * Deploys the Perpetua stack and wires it together.
+ *
+ *   npx hardhat run scripts/deploy.ts --network mezoTestnet
+ *
+ * Requires MEZO_DEPLOYER_PRIVATE_KEY (see `npx hardhat keystore set`, or pass it
+ * as an env var). Writes the resulting addresses to ../deployments/<network>.json
+ * so the frontend and the README can read them from one place.
+ */
+import { network } from "hardhat";
+import { formatEther, getAddress } from "viem";
+import { writeFileSync, mkdirSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { MEZO_TESTNET, MEZO_MAINNET } from "../addresses.js";
+
+const HERE = dirname(fileURLToPath(import.meta.url));
+
+async function main() {
+  const conn = await network.connect();
+  const { viem } = conn;
+  const pub = await viem.getPublicClient();
+  const [deployer] = await viem.getWalletClients();
+
+  const chainId = await pub.getChainId();
+  const cfg = chainId === MEZO_MAINNET.chainId ? MEZO_MAINNET : MEZO_TESTNET;
+  const netName = chainId === MEZO_MAINNET.chainId ? "mezoMainnet" : "mezoTestnet";
+
+  console.log(`\nPerpetua deploy`);
+  console.log(`  chainId  : ${chainId} (${netName})`);
+  console.log(`  deployer : ${deployer.account.address}`);
+  console.log(`  balance  : ${formatEther(await pub.getBalance({ address: deployer.account.address }))} BTC`);
+
+  if (chainId !== MEZO_TESTNET.chainId && chainId !== MEZO_MAINNET.chainId) {
+    throw new Error(`refusing to deploy to unexpected chain ${chainId}`);
+  }
+
+  // 1. Locker. Deploys LveBTC itself so both links are immutable.
+  console.log(`\n[1/3] PerpetuaLocker...`);
+  const locker = await viem.deployContract("PerpetuaLocker", [
+    cfg.veBTC,
+    cfg.veBTCVoter,
+    deployer.account.address, // owner
+    deployer.account.address, // operator (rotate with setOperator)
+  ]);
+  const lveBTC = await locker.read.lveBTC();
+  console.log(`      locker  ${locker.address}`);
+  console.log(`      lveBTC  ${lveBTC}`);
+
+  // Sanity: the locker must have resolved BTC from the escrow, not a constant.
+  const resolvedBtc = await locker.read.btc();
+  if (getAddress(resolvedBtc) !== getAddress(cfg.btc)) {
+    throw new Error(`locker resolved BTC as ${resolvedBtc}, expected ${cfg.btc}`);
+  }
+
+  // 2. Streamer.
+  console.log(`\n[2/3] MUSDRewardStreamer...`);
+  const streamer = await viem.deployContract("MUSDRewardStreamer", [
+    lveBTC,
+    cfg.musd,
+    cfg.router,
+    deployer.account.address,
+    deployer.account.address,
+  ]);
+  console.log(`      streamer ${streamer.address}`);
+
+  // 3. Point harvested rewards at the streamer.
+  console.log(`\n[3/3] Wiring rewardSink...`);
+  const tx = await locker.write.setRewardSink([streamer.address]);
+  await pub.waitForTransactionReceipt({ hash: tx });
+  console.log(`      locker.rewardSink = ${await locker.read.rewardSink()}`);
+
+  const out = {
+    network: netName,
+    chainId,
+    deployedAt: new Date().toISOString(),
+    deployer: deployer.account.address,
+    contracts: {
+      PerpetuaLocker: locker.address,
+      LveBTC: lveBTC,
+      MUSDRewardStreamer: streamer.address,
+    },
+    mezo: {
+      veBTC: cfg.veBTC,
+      veBTCVoter: cfg.veBTCVoter,
+      router: cfg.router,
+      btc: cfg.btc,
+      musd: cfg.musd,
+    },
+    explorer: cfg.explorer,
+  };
+
+  const dir = join(HERE, "..", "..", "deployments");
+  mkdirSync(dir, { recursive: true });
+  const path = join(dir, `${netName}.json`);
+  writeFileSync(path, JSON.stringify(out, null, 2) + "\n");
+  console.log(`\nWrote ${path}`);
+
+  // The frontend reads this directly, so the UI can never point at a stale deploy.
+  if (netName === "mezoTestnet") {
+    const webPath = join(HERE, "..", "..", "web", "lib", "deployment.json");
+    writeFileSync(webPath, JSON.stringify(out, null, 2) + "\n");
+    console.log(`Wrote ${webPath}`);
+  }
+  console.log(`\nVerify with:`);
+  console.log(`  npx hardhat verify --network ${netName} ${locker.address} ${cfg.veBTC} ${cfg.veBTCVoter} ${deployer.account.address} ${deployer.account.address}`);
+  console.log(`  npx hardhat verify --network ${netName} ${streamer.address} ${lveBTC} ${cfg.musd} ${cfg.router} ${deployer.account.address} ${deployer.account.address}`);
+  console.log(`\nExplorer: ${cfg.explorer}/address/${locker.address}\n`);
+}
+
+main().catch((e) => {
+  console.error(e);
+  process.exitCode = 1;
+});

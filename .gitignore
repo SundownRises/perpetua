@@ -1,0 +1,24 @@
+node_modules/
+.env
+.env.*
+!.env.example
+
+# hardhat 3
+artifacts/
+cache/
+types/
+/contracts/artifacts/
+/contracts/cache/
+/contracts/types/
+
+# next
+.next/
+out/
+/web/.next/
+/web/out/
+.vercel
+
+# misc
+*.log
+.DS_Store
+coverage/
