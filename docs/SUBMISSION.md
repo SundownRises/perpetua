@@ -124,8 +124,8 @@ is pushed and the site is deployed.
 
 | Field | Value |
 |---|---|
-| Testnet/mainnet link | `<vercel url>` |
-| Public GitHub repository | `<github url>` |
+| Testnet/mainnet link | https://perpetua-chi.vercel.app |
+| Public GitHub repository | https://github.com/SundownRises/perpetua |
 | Project or product deck | `docs/DECK.md`, exported to PDF |
 | 2-minute pitch video | `<video url>` |
 

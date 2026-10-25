@@ -10,6 +10,14 @@ ERC-20 called **`lveBTC`**.
 Built for the [Mezo Buildathon](https://app.akindo.io/wave-hacks/OVOO0gdrVU8379D10).
 Tracks 1 (DeFi) and 2 (Access & Distribution).
 
+**▸ Live on Mezo testnet: https://perpetua-chi.vercel.app**
+
+Deposit BTC, stake the `lveBTC` you get back, and claim MUSD. The dashboard reads
+every figure live from chain — including the gauge table, which comes straight from
+Mezo's `VeBTCVoter`. You'll need test BTC from
+[faucet.test.mezo.org](https://faucet.test.mezo.org/); the site will add Mezo testnet
+to your wallet in one click if it has never seen it.
+
 ---
 
 ## The problem
@@ -75,9 +83,9 @@ machine-readable version written at deploy time.
 
 | Contract | Address |
 |---|---|
-| `PerpetuaLocker` | _see deployments file_ |
-| `lveBTC` | _see deployments file_ |
-| `MUSDRewardStreamer` | _see deployments file_ |
+| `PerpetuaLocker` | [`0x7790053dd08fcde21dd265e6d89f804f5eada73c`](https://explorer.test.mezo.org/address/0x7790053dd08fcde21dd265e6d89f804f5eada73c) |
+| `lveBTC` | [`0x42127777c9A321cAE6aCEF77673CE99D8D718d3f`](https://explorer.test.mezo.org/address/0x42127777c9A321cAE6aCEF77673CE99D8D718d3f) |
+| `MUSDRewardStreamer` | [`0xbdc30dbe11c217194f5e8e6847ada72edfe9504d`](https://explorer.test.mezo.org/address/0xbdc30dbe11c217194f5e8e6847ada72edfe9504d) |
 
 Mezo contracts this builds on, all verified live by `eth_call` (not copied from docs):
 

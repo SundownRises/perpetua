@@ -144,7 +144,7 @@ gauges. Not mocks.
 - **It's a lego, not an app.** `lveBTC` is a new composable primitive other Mezo protocols can build
   on from day one.
 
-**Repo:** `github.com/<user>/perpetua` · **Live:** `<vercel-url>` · MIT
+**Repo:** https://github.com/SundownRises/perpetua · **Live:** https://perpetua-chi.vercel.app · MIT
 
 > *Say:* Perpetua makes Mezo's voting power liquid, and makes MUSD the thing that voting power pays
 > out in. Thanks — happy to dig into the contracts.
