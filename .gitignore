@@ -26,3 +26,6 @@ coverage/
 # local credential files, never commit
 .gh-token
 *.pat
+
+# typescript incremental build artifact
+*.tsbuildinfo
