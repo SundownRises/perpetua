@@ -34,7 +34,7 @@ export default {
         blockscout: {
           name: "Mezo Testnet Explorer",
           url: "https://explorer.test.mezo.org",
-          apiUrl: "https://explorer.test.mezo.org/api",
+          apiUrl: "https://api.explorer.test.mezo.org/api",
         },
       },
     },
@@ -46,7 +46,7 @@ export default {
         blockscout: {
           name: "Mezo Explorer",
           url: "https://explorer.mezo.org",
-          apiUrl: "https://explorer.mezo.org/api",
+          apiUrl: "https://api.explorer.mezo.org/api",
         },
       },
     },
