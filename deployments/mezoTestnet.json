@@ -1,0 +1,19 @@
+{
+  "network": "mezoTestnet",
+  "chainId": 31611,
+  "deployedAt": "2026-10-25T08:28:25.406Z",
+  "deployer": "0xd94ac3839b093a833f1bd999d8a12dd07a85b634",
+  "contracts": {
+    "PerpetuaLocker": "0x7790053dd08fcde21dd265e6d89f804f5eada73c",
+    "LveBTC": "0x42127777c9A321cAE6aCEF77673CE99D8D718d3f",
+    "MUSDRewardStreamer": "0xbdc30dbe11c217194f5e8e6847ada72edfe9504d"
+  },
+  "mezo": {
+    "veBTC": "0xB63fcCd03521Cf21907627bd7fA465C129479231",
+    "veBTCVoter": "0x72F8dd7F44fFa19E45955aa20A5486E8EB255738",
+    "router": "0x9a1ff7FE3a0F69959A3fBa1F1e5ee18e1A9CD7E9",
+    "btc": "0x7b7C000000000000000000000000000000000000",
+    "musd": "0x118917a40FAF1CD7a13dB0Ef56C86De7973Ac503"
+  },
+  "explorer": "https://explorer.test.mezo.org"
+}
