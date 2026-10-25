@@ -1,0 +1,36 @@
+# Normalise line endings in the repository to LF, regardless of the platform the
+# commit was made on. Without this, `core.autocrlf=true` on Windows makes git warn
+# on every commit and can show phantom whole-file diffs to anyone who clones on
+# Linux or macOS.
+* text=auto eol=lf
+
+# Windows-only scripts must keep CRLF to remain executable.
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+*.ps1   text eol=crlf
+
+# Never touch these.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.svg   text
+*.ico   binary
+*.pdf   binary
+*.woff  binary
+*.woff2 binary
+*.mp4   binary
+
+# Generated or vendored. `linguist-generated` collapses these in GitHub diffs and
+# excludes them from the repository's language statistics, so the Solidity and
+# TypeScript that was actually written is what shows up. They stay fully tracked --
+# lockfiles pin exact dependency versions, and abi.ts is required for the frontend
+# to build without first compiling the contracts.
+package-lock.json          linguist-generated=true
+**/package-lock.json       linguist-generated=true
+web/lib/abi.ts             linguist-generated=true
+web/lib/deployment.ts      linguist-generated=true
+deployments/*.json         linguist-generated=true
+
+# Solidity is the point of this repository; make sure GitHub counts it.
+*.sol   linguist-language=Solidity
